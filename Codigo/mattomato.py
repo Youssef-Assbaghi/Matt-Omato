@@ -8,6 +8,7 @@ import sim
 import numpy as np
 import math
 import time
+import robot
 
 
 # In[43]:
@@ -29,7 +30,7 @@ def connect(port):
 
 clientID = connect(19999)
 
-
+print("El client id es ",clientID)
 # In[45]:
 
 
@@ -61,50 +62,17 @@ ret,Joint_Base=sim.simxGetObjectHandle(clientID,'Joint_Base',sim.simx_opmode_blo
 ret,Joint_Hombro=sim.simxGetObjectHandle(clientID,'Joint_Hombro',sim.simx_opmode_blocking)
 ret,Joint_Codo=sim.simxGetObjectHandle(clientID,'Joint_Codo',sim.simx_opmode_blocking)
 ret,Joint_Muneca=sim.simxGetObjectHandle(clientID,'Joint_Muneca',sim.simx_opmode_blocking)
-ret,Joint_Rotacion=sim.simxGetObjectHandle(clientID,'Joint_Rotacion',sim.simx_opmode_blocking)
+ret,Joint_Pinza=sim.simxGetObjectHandle(clientID,'Joint_Pinza',sim.simx_opmode_blocking)
 ret,Joint_Cam=sim.simxGetObjectHandle(clientID,'Joint_Cam',sim.simx_opmode_blocking)
-print(Joint_Base, Joint_Hombro, Joint_Codo,Joint_Muneca,Joint_Rotacion,Joint_Cam)
+print(Joint_Base, Joint_Hombro, Joint_Codo,Joint_Muneca,Joint_Pinza,Joint_Cam)
 
 
-# In[49]:
-
-
-returnCode, pos0 = sim.simxGetJointPosition(clientID, Joint_Base, sim.simx_opmode_blocking)
-print(pos0)
-
-
-# In[9]:
-
-
-returnCode, pos1 = sim.simxGetJointPosition(clientID, Joint_Hombro, sim.simx_opmode_blocking)
-print(pos1)
-
-
-# In[10]:
-
-
-returnCode, pos2 = sim.simxGetJointPosition(clientID, Joint_Codo, sim.simx_opmode_blocking)
-print(pos2)
-
-
-# In[11]:
-
-
-returnCode, pos3 = sim.simxGetJointPosition(clientID, Joint_Muneca, sim.simx_opmode_blocking)
-print(pos3)
-
-
-# In[12]:
-
-
-returnCode, pos4 = sim.simxGetJointPosition(clientID, Joint_Rotacion, sim.simx_opmode_blocking)
-print(pos4)
 
 
 # In[13]:
 
-
-q0 = 0 * np.pi/180
+print("Empizan las buenas")
+q0 = 120 * np.pi/180
 returnCode = sim.simxSetJointTargetPosition(clientID, Joint_Base0, q0, sim.simx_opmode_oneshot)
 print(returnCode)
 time.sleep(3)
@@ -136,8 +104,8 @@ time.sleep(3)
 # In[21]:
 
 
-q4 = -20 * np.pi/180
-returnCode = sim.simxSetJointTargetPosition(clientID, Joint_Rotacion, q4, sim.simx_opmode_oneshot)
+q4 = -120 * np.pi/180
+returnCode = sim.simxSetJointTargetPosition(clientID, Joint_Pinza, q4, sim.simx_opmode_oneshot)
 print(returnCode)
 
 time.sleep(3)
