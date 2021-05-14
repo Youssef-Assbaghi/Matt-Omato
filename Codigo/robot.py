@@ -12,7 +12,11 @@ import math
 class Robot:
     def __init__(self):
         self.clientID=0
-        
+        self.altura=0.5577
+        self.brazo=0.4318
+        self.antebrazo=0.7478
+        self.muñeca=0.1877
+        self.cabGrados=0
     def getClientID(self):
         return self.clientID
     def connect(self,port):
@@ -62,6 +66,33 @@ class Robot:
             v1=vel*math.pi/180
             v1=-v1   
         self.setTargetVel(v1,h)
+    
+    def getSize(self):
+        ret,Base=self.getObjectHandler('Base0')
+        ret,Brazo=self.getObjectHandler('Brazo_3')
+        ret,Antebrazo=self.getObjectHandler('Brazo_4')
+        ret,Muñequilla=self.getObjectHandler('Muneca0')
+        
+        error,zmax_b=sim.simxGetObjectFloatParameter(self.clientID,Base,20,sim.simx_opmode_blocking)
+        error,zmin_b=sim.simxGetObjectFloatParameter(self.clientID,Base,17,sim.simx_opmode_blocking)
+        
+        self.base=(zmax_b-zmin_b)*1000*2
+        
+        error,xmax_bz=sim.simxGetObjectFloatParameter(self.clientID,Brazo,24,sim.simx_opmode_blocking)
+        error,xmin_bz=sim.simxGetObjectFloatParameter(self.clientID,Brazo,21,sim.simx_opmode_blocking)
+        
+        self.brazo=(xmax_bz-xmin_bz)*1000
+        
+        error,xmax_ab=sim.simxGetObjectFloatParameter(self.clientID,Antebrazo,24,sim.simx_opmode_blocking)
+        error,xmin_ab=sim.simxGetObjectFloatParameter(self.clientID,Antebrazo,21,sim.simx_opmode_blocking)
+        
+        self.antebrazo=(xmax_ab-xmin_ab)*1000
+        
+        error,xmax_m=sim.simxGetObjectFloatParameter(self.clientID,Muñequilla,24,sim.simx_opmode_blocking)
+        error,xmin_m=sim.simxGetObjectFloatParameter(self.clientID,Muñequilla,21,sim.simx_opmode_blocking)
+        
+        self.muñeca=(xmax_m-xmin_m)*1000
+       
         
         
         

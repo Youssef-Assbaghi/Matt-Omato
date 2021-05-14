@@ -15,15 +15,13 @@ class Movimiento:
     
     def coordenadas(self,x,y,z):
 
-        cabGrados=0
-        Axis5=90 #Giro de la pinza
-        Pinza=110
-        cabRAD=cabGrados*np.pi/180
-        
+        Axis5=180
+        cabRAD=self.cabGrados*np.pi/180
         Axis1=math.atan2(y, x)
-        M=math.sqrt(pow(x,2)+pow(y, 2))
+        M=math.sqrt(pow(x,2)+pow(y,2))
         xprima=M
         yprima=z
+
         Afx=math.cos(cabRAD)*self.m
         B=xprima-Afx
         Afy=math.sin(cabRAD)*self.m
@@ -35,12 +33,16 @@ class Movimiento:
         gamma=math.acos((pow(self.b,2)+pow(self.ab,2)-pow(Hip,2))/(2*self.b*self.ab))
         Axis3=gamma
         Axis4=2*np.pi-cabRAD-Axis2-Axis3
-        Axis1Grados=Axis1*180/np.pi
-        Axis2Grados=90-Axis2*180/np.pi
-        Axis3Grados=180-Axis3*180/np.pi
-        Axis4Grados=180-Axis4*180/np.pi
         
-        return Axis1Grados,Axis2Grados,Axis3Grados,Axis4Grados,Axis5,Pinza
+        j0=90+Axis1*180/np.pi #joint0
+        j1=90-Axis2*180/np.pi #joint1
+        j2=180-Axis3*180/np.pi #joint2
+        j3=180-Axis4*180/np.pi #joint3
+        j4=Axis5 #joint5  Se ha dado en grados inicialmente
+        print(j0,j1,j2,j3,j4)
+        
+        return j0*np.pi/180,j1*np.pi/180,j2*np.pi/180,j3*np.pi/180,j4*np.pi/180
+        
         
         
         
