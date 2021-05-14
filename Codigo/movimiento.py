@@ -12,7 +12,7 @@ class Movimiento:
         self.ab=antebrazo
         self.H=altura
         self.m=muñequilla
-    
+        self.cabGrados=0
     def coordenadas(self,x,y,z):
 
         Axis5=180

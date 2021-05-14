@@ -46,10 +46,10 @@ if __name__ == '__main__':
     returnCode,pos_d=robot.getObjectPosition(dummy)
 
     #SetJoints
-    ret,Joint_Base=robot.getObjectHandler('Joint_Base1')
-    ret,Joint_Hombro=robot.getObjectHandler('Joint_Hombro1')
-    ret,Joint_Codo=robot.getObjectHandler('Joint_Codo1')
-    ret,Joint_Muneca=robot.getObjectHandler('Joint_Muneca1')
+    ret,Joint_Base=robot.getObjectHandler('Joint_Base0')
+    ret,Joint_Hombro=robot.getObjectHandler('Joint_Hombro0')
+    ret,Joint_Codo=robot.getObjectHandler('Joint_Codo0')
+    ret,Joint_Muneca=robot.getObjectHandler('Joint_Muneca0')
     ret,Joint_Pinza=robot.getObjectHandler('Joint_Pinza')
     ret,Joint_Cam=robot.getObjectHandler('Joint_Cam0')
 
@@ -60,13 +60,11 @@ if __name__ == '__main__':
     
 
     angulo=25
-    vision_open3d=True
+    vision_open3d=False
     centers = pointcloud.Get_Image(sensorHandle,robot, angulo, vision_open3d)
     print(centers)
     """   
     POS HOME:
-    """
-    
     robot.setTargetPosition(Joint_Base,0)
     time.sleep(2)
     robot.setTargetPosition(Joint_Hombro,0)
@@ -77,30 +75,34 @@ if __name__ == '__main__':
     time.sleep(2)
     robot.setTargetPosition(Joint_Pinza,0)
     time.sleep(5)
-    """
+    
     Aqui caluclamos la posicion del Dummy objetivo
     
     ret,dummy_cubo=robot.getObjectHandler('Dummy_Cubo')
     ret,pos=robot.getObjectPosition(dummy_cubo)
     print(pos)
     """
-    pos=centers[0]
-    q=mov.coordenadas(pos[0]-pos_d[0],pos[1]-pos_d[1],pos[2])
-    
-    """
-    robot.setTargetPosition(Joint_Base,q[0])
-    time.sleep(2)
-    robot.setTargetPosition(Joint_Hombro,q[1])
-    time.sleep(2)
-    robot.setTargetPosition(Joint_Codo,q[2] )
-    time.sleep(2)
-    robot.setTargetPosition(Joint_Muneca,q[3])
-    time.sleep(2)
-    robot.setTargetPosition(Joint_Pinza,q[4])
-    robot.getObjectPosition(dummy)
-    """
-    
-    robot.getObjectPosition(dummy)
+
+    for ce in centers:
+        pos=[-0.76,0.01,0.70]
+        pos_correcion=[0.0,0.00,0.0]
+        posf=pos+pos_correcion
+        q=mov.coordenadas(posf[0],posf[1],posf[2])
+
+
+        robot.setTargetPosition(Joint_Base,q[0])
+        time.sleep(2)
+        robot.setTargetPosition(Joint_Hombro,q[1])
+        time.sleep(2)
+        robot.setTargetPosition(Joint_Codo,q[2] )
+        time.sleep(2)
+        robot.setTargetPosition(Joint_Muneca,q[3])
+        time.sleep(2)
+        robot.setTargetPosition(Joint_Pinza,q[4])
+        robot.getObjectPosition(dummy)
+
+
+        robot.getObjectPosition(dummy)
     
     
     
