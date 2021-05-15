@@ -52,6 +52,8 @@ if __name__ == '__main__':
     ret,Joint_Muneca=robot.getObjectHandler('Joint_Muneca0')
     ret,Joint_Pinza=robot.getObjectHandler('Joint_Pinza')
     ret,Joint_Cam=robot.getObjectHandler('Joint_Cam0')
+    ret,Joint_Movimiento_Pinza=robot.getObjectHandler('Barrett_openCloseJoint#0')
+    ret,Joint_Movimiento_Pinza1=robot.getObjectHandler('Barrett_openCloseJoint0#0')
 
     ret,sensorHandle = robot.getObjectHandler('Vision_sensor0')
     print(Joint_Base, Joint_Hombro, Joint_Codo,Joint_Muneca,Joint_Cam,Joint_Pinza, sensorHandle)
@@ -60,10 +62,11 @@ if __name__ == '__main__':
     
 
     angulo=25
+    """ 
     vision_open3d=False
     centers = pointcloud.Get_Image(sensorHandle,robot, angulo, vision_open3d)
     print(centers)
-    """   
+      
     POS HOME:
     robot.setTargetPosition(Joint_Base,0)
     time.sleep(2)
@@ -81,7 +84,7 @@ if __name__ == '__main__':
     ret,dummy_cubo=robot.getObjectHandler('Dummy_Cubo')
     ret,pos=robot.getObjectPosition(dummy_cubo)
     print(pos)
-    """
+    
 
     for ce in centers:
         pos=[-0.76,0.01,0.70]
@@ -100,9 +103,9 @@ if __name__ == '__main__':
         time.sleep(2)
         robot.setTargetPosition(Joint_Pinza,q[4])
         robot.getObjectPosition(dummy)
-
-
-        robot.getObjectPosition(dummy)
+        """
+    robot.actuarPinza(Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1)
+    robot.getObjectPosition(dummy)
     
     
     

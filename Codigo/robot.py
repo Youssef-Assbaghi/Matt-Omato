@@ -7,7 +7,7 @@ Created on Sun May  2 11:40:37 2021
 
 import sim
 import math
-
+import time
 
 class Robot:
     def __init__(self):
@@ -17,6 +17,7 @@ class Robot:
         self.antebrazo=0.7478
         self.muñeca=0.1877
         self.cabGrados=0
+        self.pinza=True
     def getClientID(self):
         return self.clientID
     def connect(self,port):
@@ -29,6 +30,28 @@ class Robot:
         else: print("no se pudo conectar")
         self.clientID = clientID
         return self.clientID
+    
+    def actuarPinza(self,Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1):
+
+        """
+        Le pasamos los hagndlers de Joints que controlan los tres dedos de la pinza
+        Es importante deshabilitar la interfaz grafica del robot para poder hacer que la pinza funcione
+        Debe tener un sleep de 6 segundos ya que se cierra poco a poco
+        """
+
+        if self.pinza:   
+            sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza, -0.02, sim.simx_opmode_oneshot)
+            sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza1, -0.02, sim.simx_opmode_oneshot)
+            time.sleep(7)
+            self.pinza=False
+
+        else:
+            sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza,0.02, sim.simx_opmode_oneshot)
+            sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza1, 0.02, sim.simx_opmode_oneshot)
+            self.pinza=True
+            time.sleep(7)
+            
+
     
     def getObjectHandler(self,part):
         returnCode,handle=sim.simxGetObjectHandle(self.clientID,part,sim.simx_opmode_blocking)
