@@ -9,6 +9,7 @@ import movimiento
 import pointcloud
 import numpy as np
 import time
+import sim
 def static_simulation(Joint_Base, Joint_Hombro, Joint_Codo,Joint_Muneca,Joint_Cam,Joint_Pinza,robot):
     print("static simulation")
     q0 = 120 * np.pi/180
@@ -52,22 +53,25 @@ if __name__ == '__main__':
     ret,Joint_Muneca=robot.getObjectHandler('Joint_Muneca0')
     ret,Joint_Pinza=robot.getObjectHandler('Joint_Pinza')
     ret,Joint_Cam=robot.getObjectHandler('Joint_Cam0')
-    ret,Joint_Movimiento_Pinza=robot.getObjectHandler('Barrett_openCloseJoint#0')
-    ret,Joint_Movimiento_Pinza1=robot.getObjectHandler('Barrett_openCloseJoint0#0')
+    ret,Joint_Movimiento_Pinza=robot.getObjectHandler('Barrett_openCloseJoint')
+    ret,Joint_Movimiento_Pinza1=robot.getObjectHandler('Barrett_openCloseJoint0')
+    ret,P_SD=robot.getObjectHandler('P_SD')
+    ret,P_ST=robot.getObjectHandler('P_ST')
+
+
 
     ret,sensorHandle = robot.getObjectHandler('Vision_sensor0')
     print(Joint_Base, Joint_Hombro, Joint_Codo,Joint_Muneca,Joint_Cam,Joint_Pinza, sensorHandle)
     
     mov=movimiento.Movimiento(robot.brazo,robot.antebrazo,robot.altura,robot.muñeca)
-    
 
     angulo=25
-    """ 
+
     vision_open3d=False
     centers = pointcloud.Get_Image(sensorHandle,robot, angulo, vision_open3d)
     print(centers)
-      
-    POS HOME:
+    """
+    #POS HOME:
     robot.setTargetPosition(Joint_Base,0)
     time.sleep(2)
     robot.setTargetPosition(Joint_Hombro,0)
@@ -78,36 +82,56 @@ if __name__ == '__main__':
     time.sleep(2)
     robot.setTargetPosition(Joint_Pinza,0)
     time.sleep(5)
-    
-    Aqui caluclamos la posicion del Dummy objetivo
-    
+    """
+    #Aqui caluclamos la posicion del Dummy objetivo
+
     ret,dummy_cubo=robot.getObjectHandler('Dummy_Cubo')
     ret,pos=robot.getObjectPosition(dummy_cubo)
     print(pos)
-    
-
+    ret, sphere = robot.getObjectHandler('Sphere0')
     for ce in centers:
-        pos=[-0.76,0.01,0.70]
-        pos_correcion=[0.0,0.00,0.0]
+        pos=ce
+        pos_correcion=[0.48,0.15,-0.2]
         posf=pos+pos_correcion
         q=mov.coordenadas(posf[0],posf[1],posf[2])
-
-
         robot.setTargetPosition(Joint_Base,q[0])
+        time.sleep(2)
+        robot.setTargetPosition(Joint_Codo, q[2])
+        time.sleep(2)
+        robot.setTargetPosition(Joint_Muneca, q[3])
         time.sleep(2)
         robot.setTargetPosition(Joint_Hombro,q[1])
         time.sleep(2)
-        robot.setTargetPosition(Joint_Codo,q[2] )
+        robot.actuarPinza(Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1)
         time.sleep(2)
-        robot.setTargetPosition(Joint_Muneca,q[3])
-        time.sleep(2)
+        res, Robotiq = sim.simxGetObjectHandle(robot.clientID, 'FC', sim.simx_opmode_blocking)
+        returncode = sim.simxSetObjectParent(robot.clientID, sphere, Robotiq, True, sim.simx_opmode_blocking);
         robot.setTargetPosition(Joint_Pinza,q[4])
-        robot.getObjectPosition(dummy)
-        """
-    robot.actuarPinza(Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1)
-    robot.getObjectPosition(dummy)
-    
-    
+        time.sleep(2)
+        sim.simxSetObjectIntParameter(robot.clientID, sphere, sim.sim_shapeintparam_static, 0, sim.simx_opmode_oneshot)
+        pos = [-0.9, 0.0126, 0.55]
+        posf = pos
+        q = mov.coordenadas(posf[0], posf[1], posf[2])
+        robot.setTargetPosition(Joint_Hombro, q[1])
+        time.sleep(2)
+        robot.setTargetPosition(Joint_Base, q[0])
+        time.sleep(2)
+        robot.setTargetPosition(Joint_Codo, q[2])
+        time.sleep(2)
+        robot.setTargetPosition(Joint_Muneca, q[3])
+        time.sleep(2)
+        robot.setTargetPosition(Joint_Pinza, q[4])
+        time.sleep(2)
+        robot.actuarPinza(Joint_Movimiento_Pinza, Joint_Movimiento_Pinza1)
+        time.sleep(2)
+        returncode=sim.simxSetObjectParent(robot.clientID, sphere,0, False, sim.simx_opmode_blocking)
+        #sim.simxSetObjectIntParameter(robot.clientID, sphere, sim.sim_shapeintparam_static, 1, sim.simx_opmode_oneshot)
+        time.sleep(2)
+        returncode=sim.simxSetObjectParent(robot.clientID, sphere,1, False, sim.simx_opmode_blocking)
+
+
+
+
     
     
     

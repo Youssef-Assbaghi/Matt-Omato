@@ -12,10 +12,10 @@ import time
 class Robot:
     def __init__(self):
         self.clientID=0
-        self.altura=0.5577
-        self.brazo=0.4318
-        self.antebrazo=0.7478
-        self.muñeca=0.1877
+        self.altura=0.5628
+        self.brazo=0.4268
+        self.antebrazo=0.6219
+        self.muñeca=0.1665
         self.cabGrados=0
         self.pinza=True
     def getClientID(self):
@@ -30,7 +30,11 @@ class Robot:
         else: print("no se pudo conectar")
         self.clientID = clientID
         return self.clientID
-    
+
+    def get_proximitysensor(self,psensor):
+        errorCode, detectionState, detectedPoint, detectedObjectHandle, detectedSurfaceNormalVector=sim.simxReadProximitySensor(self.clientID, psensor, sim.simx_opmode_blocking)
+        return [detectionState]
+
     def actuarPinza(self,Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1):
 
         """
@@ -40,16 +44,16 @@ class Robot:
         """
 
         if self.pinza:   
-            sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza, -0.02, sim.simx_opmode_oneshot)
-            sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza1, -0.02, sim.simx_opmode_oneshot)
-            time.sleep(7)
+            sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza, -0.2, sim.simx_opmode_oneshot)
+            sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza1, -0.2, sim.simx_opmode_oneshot)
+            time.sleep(1)
             self.pinza=False
 
         else:
             sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza,0.02, sim.simx_opmode_oneshot)
             sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza1, 0.02, sim.simx_opmode_oneshot)
             self.pinza=True
-            time.sleep(7)
+            time.sleep(1)
             
 
     
