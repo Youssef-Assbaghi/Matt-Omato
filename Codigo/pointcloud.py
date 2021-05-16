@@ -100,33 +100,34 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
     pcl.points = o3d.utility.Vector3dVector(xyzv)
     pcl.colors = o3d.utility.Vector3dVector(hsiv)
     labels = np.array(pcl.cluster_dbscan(eps=0.1, min_points=10))  #Clustering
-    max_label = labels.max()
-    colors = plt.get_cmap("tab20")(labels / (max_label))
-    colors[labels < 0] = 0
-    pcl.colors = o3d.utility.Vector3dVector(colors[:, :3])
-    if visualizar:
-        new_pos, new_col = draw_guild_lines(dic)
-        guild_points = o3d.geometry.PointCloud()
-        guild_points.points = o3d.utility.Vector3dVector(new_pos)
-        guild_points.colors = o3d.utility.Vector3dVector(new_col)
-        vis = o3d.visualization.Visualizer()
-        vis.create_window(width=960,height=540)
-        vis.add_geometry(pcl)
-        vis.add_geometry(guild_points)
     centers=np.array([])
-    for i in range(max_label+1):  #Ransac each label
-          points = np.asarray(pcl.points)[labels==i]
-          sph = pyrsc.Sphere()
-          center, radius, inliers = sph.fit(points, thresh=0.01)
-          centers = np.append(centers, center)
-          sphere=o3d.geometry.TriangleMesh.create_sphere(radius)
-          sphere.paint_uniform_color(np.asarray(pcl.colors)[labels==i][0])
-          sphere=sphere.translate(center)
-          if visualizar:
-              vis.add_geometry(sphere)
-    centers=np.reshape(centers,(-1,3))
-    if visualizar:
-        a = vis.get_view_control()
-        vis.run()
-        vis.destroy_window()
+    if  labels.size!=0:
+        max_label = labels.max()
+        colors = plt.get_cmap("tab20")(labels / (max_label))
+        colors[labels < 0] = 0
+        pcl.colors = o3d.utility.Vector3dVector(colors[:, :3])
+        if visualizar:
+            new_pos, new_col = draw_guild_lines(dic)
+            guild_points = o3d.geometry.PointCloud()
+            guild_points.points = o3d.utility.Vector3dVector(new_pos)
+            guild_points.colors = o3d.utility.Vector3dVector(new_col)
+            vis = o3d.visualization.Visualizer()
+            vis.create_window(width=960,height=540)
+            vis.add_geometry(pcl)
+            vis.add_geometry(guild_points)
+        for i in range(max_label+1):  #Ransac each label
+              points = np.asarray(pcl.points)[labels==i]
+              sph = pyrsc.Sphere()
+              center, radius, inliers = sph.fit(points, thresh=0.01)
+              centers = np.append(centers, center)
+              sphere=o3d.geometry.TriangleMesh.create_sphere(radius)
+              sphere.paint_uniform_color(np.asarray(pcl.colors)[labels==i][0])
+              sphere=sphere.translate(center)
+              if visualizar:
+                  vis.add_geometry(sphere)
+        centers=np.reshape(centers,(-1,3))
+        if visualizar:
+            a = vis.get_view_control()
+            vis.run()
+            vis.destroy_window()
     return centers
