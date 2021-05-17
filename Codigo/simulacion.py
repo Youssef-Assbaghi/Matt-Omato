@@ -106,7 +106,7 @@ if __name__ == '__main__':
                         if(auxdist<bestdists):
                             bestdists = auxdist
                             point = toa
-
+                    pos_d-point[1]
                     returncode=sim.simxSetObjectParent(robot.clientID, point[0],FC, True, sim.simx_opmode_blocking)
                     robot.actuarPinza(Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1)
                     time.sleep(2)
@@ -115,12 +115,11 @@ if __name__ == '__main__':
                     pos = [-0.8, 0.0+aux_giro, 0.71]#posicion de la caja
                     posf = pos
                     q = mov.coordenadas(posf[0], posf[1], posf[2])
-
+                    robot.setTargetPosition(Joint_Codo, q[2])
+                    time.sleep(2)
                     robot.setTargetPosition(Joint_Hombro, q[1])
                     time.sleep(2)
                     robot.setTargetPosition(Joint_Base, q[0])
-                    time.sleep(2)
-                    robot.setTargetPosition(Joint_Codo, q[2])
                     time.sleep(2)
                     robot.setTargetPosition(Joint_Muneca, q[3])
                     time.sleep(2)

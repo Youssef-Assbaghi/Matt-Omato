@@ -15,7 +15,7 @@ class Robot:
         self.altura=0.5628
         self.brazo=0.4268
         self.antebrazo=0.6219
-        self.muñeca=0.1665
+        self.muñeca=0.1765
         self.cabGrados=0
         self.pinza=True
     def getClientID(self):
