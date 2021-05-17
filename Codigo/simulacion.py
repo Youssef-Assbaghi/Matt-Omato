@@ -49,7 +49,7 @@ if __name__ == '__main__':
     print(Joint_Base, Joint_Hombro, Joint_Codo,Joint_Muneca,Joint_Cam,Joint_Pinza, sensorHandle)
     
     angulo=50
-    tomates=3
+    tomates=1
     vision_open3d=False
     """
     #POS HOME:
@@ -58,27 +58,30 @@ if __name__ == '__main__':
     #Aqui cogemos todos los Handles de los tomates
     toma=[]
     for i in range(tomates):
-        ret, sphere = robot.getObjectHandler('Sphere'+str(i))
+        ret, sphere = robot.getObjectHandler('Tomate'+str(i))
         auxv = [sphere]
         auxv.append(np.array(sim.simxGetObjectPosition(robot.clientID,sphere,-1,sim.simx_opmode_blocking)[1]))
         toma.append(auxv)
-    
-    
+    direccion=1
+    ultra_dir=P_SD
     for i in inf():
-        errorCode, detectionState, detectedPoint, detectedObjectHandle, detectedSurfaceNormalVector=sim.simxReadProximitySensor(robot.clientID, P_SD, sim.simx_opmode_blocking)
+        errorCode, detectionState, detectedPoint, detectedObjectHandle, detectedSurfaceNormalVector=sim.simxReadProximitySensor(robot.clientID, ultra_dir, sim.simx_opmode_blocking)
         if detectionState:
-            break
+            direccion=2
+            ultra_dir=P_ST
+            robot.setTargetPosition(Joint_Cam, np.pi/2)
+            time.sleep(1.5)
         else:
             centers = pointcloud.Get_Image(sensorHandle,robot, angulo, vision_open3d)
             if len(centers)==0:#No se detecta tomate
-                robot.move(100,'Joint_DD0','Joint_DI0','Joint_TD0','Joint_TI0',1)
+                robot.move(100,'Joint_DD0','Joint_DI0','Joint_TD0','Joint_TI0',direccion)
                 time.sleep(1)
                 robot.move(0,'Joint_DD0','Joint_DI0','Joint_TD0','Joint_TI0',0)
             else:#Se ha detectado un tomate, como minimo
-
+                print(centers)
                 for ce in centers:#En centers estan los tomates encontrados
                     pos=ce
-                    pos_correcion=[0.5,0.0,0.0]
+                    pos_correcion=[0.5,0.03,0.0]
                     posf=pos+pos_correcion
                     q=mov.coordenadas(posf[0],posf[1],posf[2])
                     robot.setTargetPosition(Joint_Base,q[0])
@@ -100,11 +103,11 @@ if __name__ == '__main__':
                             point = toa
 
                     returncode=sim.simxSetObjectParent(robot.clientID, point[0],FC, True, sim.simx_opmode_blocking)
-                    #robot.actuarPinza(Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1)
+                    robot.actuarPinza(Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1)
                     time.sleep(2)
                     robot.setTargetPosition(Joint_Pinza,q[4])
                     time.sleep(2)
-                    pos = [-0.8, 0.0, 0.75]#posicion de la caja
+                    pos = [-0.8, 0.0, 0.65]#posicion de la caja
                     posf = pos
                     q = mov.coordenadas(posf[0], posf[1], posf[2])
 
@@ -116,13 +119,13 @@ if __name__ == '__main__':
                     time.sleep(2)
                     robot.setTargetPosition(Joint_Muneca, q[3])
                     time.sleep(2)
-                    robot.setTargetPosition(Joint_Pinza, q[4])
-                    time.sleep(2)
                     #Deshacemos la relacion padre-hijo
                     returncode=sim.simxSetObjectParent(robot.clientID, point[0], -1, True, sim.simx_opmode_blocking)
+                    robot.actuarPinza(Joint_Movimiento_Pinza, Joint_Movimiento_Pinza1)
+                    time.sleep(0.5)
                     sim.simxSetObjectIntParameter(robot.clientID, point[0], sim.sim_shapeintparam_static, 0, sim.simx_opmode_oneshot)
-                    #robot.actuarPinza(Joint_Movimiento_Pinza, Joint_Movimiento_Pinza1)
-                    time.sleep(2)
+                    time.sleep(1.5)
+                    robot.setTargetPosition(Joint_Pinza, 0)
                     sim.simxSetObjectIntParameter(robot.clientID, point[0], sim.sim_shapeintparam_static, 1, sim.simx_opmode_oneshot)
 
 
