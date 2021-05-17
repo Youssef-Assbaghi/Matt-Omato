@@ -38,7 +38,7 @@ class Robot:
     def actuarPinza(self,Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1):
 
         """
-        Le pasamos los hagndlers de Joints que controlan los tres dedos de la pinza
+        Le pasamos los handlers de Joints que controlan los tres dedos de la pinza
         Es importante deshabilitar la interfaz grafica del robot para poder hacer que la pinza funcione
         Debe tener un sleep de 6 segundos ya que se cierra poco a poco
         """
@@ -81,10 +81,10 @@ class Robot:
     def move(self,vel,obj1,obj2,obj3,obj4,direction):
         #Direction puede ser 0 Stop, 1 Alante, 2 Atras
         h=[0,0,0,0]
-        h[0]=self.getObjectHandler(self.clientID,obj1,sim.simx_opmode_blocking)
-        h[1]=self.getObjectHandler(self.clientID,obj2,sim.simx_opmode_blocking)
-        h[2]=self.getObjectHandler(self.clientID,obj3,sim.simx_opmode_blocking)
-        h[3]=self.getObjectHandler(self.clientID,obj4,sim.simx_opmode_blocking)
+        h[0]=self.getObjectHandler(obj1)
+        h[1]=self.getObjectHandler(obj2)
+        h[2]=self.getObjectHandler(obj3)
+        h[3]=self.getObjectHandler(obj4)
         if direction==0:
             v1=0
         elif direction==1:   
@@ -94,31 +94,17 @@ class Robot:
             v1=-v1   
         self.setTargetVel(v1,h)
     
-    def getSize(self):
-        ret,Base=self.getObjectHandler('Base0')
-        ret,Brazo=self.getObjectHandler('Brazo_3')
-        ret,Antebrazo=self.getObjectHandler('Brazo_4')
-        ret,Muñequilla=self.getObjectHandler('Muneca0')
-        
-        error,zmax_b=sim.simxGetObjectFloatParameter(self.clientID,Base,20,sim.simx_opmode_blocking)
-        error,zmin_b=sim.simxGetObjectFloatParameter(self.clientID,Base,17,sim.simx_opmode_blocking)
-        
-        self.base=(zmax_b-zmin_b)*1000*2
-        
-        error,xmax_bz=sim.simxGetObjectFloatParameter(self.clientID,Brazo,24,sim.simx_opmode_blocking)
-        error,xmin_bz=sim.simxGetObjectFloatParameter(self.clientID,Brazo,21,sim.simx_opmode_blocking)
-        
-        self.brazo=(xmax_bz-xmin_bz)*1000
-        
-        error,xmax_ab=sim.simxGetObjectFloatParameter(self.clientID,Antebrazo,24,sim.simx_opmode_blocking)
-        error,xmin_ab=sim.simxGetObjectFloatParameter(self.clientID,Antebrazo,21,sim.simx_opmode_blocking)
-        
-        self.antebrazo=(xmax_ab-xmin_ab)*1000
-        
-        error,xmax_m=sim.simxGetObjectFloatParameter(self.clientID,Muñequilla,24,sim.simx_opmode_blocking)
-        error,xmin_m=sim.simxGetObjectFloatParameter(self.clientID,Muñequilla,21,sim.simx_opmode_blocking)
-        
-        self.muñeca=(xmax_m-xmin_m)*1000
+    def posHome(self,Joint_Base,Joint_Hombro,Joint_Codo,Joint_Muneca,Joint_Pinza):
+        self.setTargetPosition(Joint_Base,0)
+        time.sleep(2)
+        self.setTargetPosition(Joint_Hombro,0)
+        time.sleep(2)
+        self.setTargetPosition(Joint_Codo,0 )
+        time.sleep(2)
+        self.setTargetPosition(Joint_Muneca,0)
+        time.sleep(2)
+        self.setTargetPosition(Joint_Pinza,0)
+        time.sleep(5)
        
         
         
