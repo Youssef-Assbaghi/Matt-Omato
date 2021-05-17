@@ -50,8 +50,8 @@ class Robot:
             self.pinza=False
 
         else:
-            sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza,0.02, sim.simx_opmode_oneshot)
-            sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza1, 0.02, sim.simx_opmode_oneshot)
+            sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza,0.2, sim.simx_opmode_oneshot)
+            sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza1, 0.2, sim.simx_opmode_oneshot)
             self.pinza=True
             time.sleep(1)
             

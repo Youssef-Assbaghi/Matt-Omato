@@ -79,7 +79,8 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
     focal_length = (640.0/2.0) / math.tan((83.0/2.0) * np.pi/ 180)
     ss = math.sin(math.radians(angulo))
     cs = math.cos(math.radians(angulo))
-    dic = {"x":[-2,2], #rojo
+    centers = np.array([])
+    dic = {"x":[-1.0,2], #rojo
            "z":[0.1,0.75], #azul
             "y":[0.5,1.75]} #verde
     for u in range(u_res):
@@ -94,40 +95,40 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
                     if((auxhsv[0]<0.15 or auxhsv[0]>0.85) and auxhsv[1]>0.60 and auxhsv[2]>0.20): #Threshold HSI
                         xyzv = np.append(xyzv, aux_xyzv)
                         hsiv = np.append(hsiv, img[u][v])
-    xyzv=np.reshape(xyzv,(-1,3))
-    hsiv=np.reshape(hsiv,(-1,3))
-    pcl = o3d.geometry.PointCloud()
-    pcl.points = o3d.utility.Vector3dVector(xyzv)
-    pcl.colors = o3d.utility.Vector3dVector(hsiv)
-    labels = np.array(pcl.cluster_dbscan(eps=0.1, min_points=10))  #Clustering
-    centers=np.array([])
-    if  labels.size!=0:
-        max_label = labels.max()
-        colors = plt.get_cmap("tab20")(labels / (max_label))
-        colors[labels < 0] = 0
-        pcl.colors = o3d.utility.Vector3dVector(colors[:, :3])
-        if visualizar:
-            new_pos, new_col = draw_guild_lines(dic)
-            guild_points = o3d.geometry.PointCloud()
-            guild_points.points = o3d.utility.Vector3dVector(new_pos)
-            guild_points.colors = o3d.utility.Vector3dVector(new_col)
-            vis = o3d.visualization.Visualizer()
-            vis.create_window(width=960,height=540)
-            vis.add_geometry(pcl)
-            vis.add_geometry(guild_points)
-        for i in range(max_label+1):  #Ransac each label
-              points = np.asarray(pcl.points)[labels==i]
-              sph = pyrsc.Sphere()
-              center, radius, inliers = sph.fit(points, thresh=0.01)
-              centers = np.append(centers, center)
-              sphere=o3d.geometry.TriangleMesh.create_sphere(radius)
-              sphere.paint_uniform_color(np.asarray(pcl.colors)[labels==i][0])
-              sphere=sphere.translate(center)
-              if visualizar:
-                  vis.add_geometry(sphere)
-        centers=np.reshape(centers,(-1,3))
-        if visualizar:
-            a = vis.get_view_control()
-            vis.run()
-            vis.destroy_window()
+    if len(xyzv) != 0:
+        xyzv=np.reshape(xyzv,(-1,3))
+        hsiv=np.reshape(hsiv,(-1,3))
+        pcl = o3d.geometry.PointCloud()
+        pcl.points = o3d.utility.Vector3dVector(xyzv)
+        pcl.colors = o3d.utility.Vector3dVector(hsiv)
+        labels = np.array(pcl.cluster_dbscan(eps=0.1, min_points=10))  #Clustering
+        if  labels.size!=0:
+            max_label = labels.max()
+            colors = plt.get_cmap("tab20")(labels / (max_label))
+            colors[labels < 0] = 0
+            pcl.colors = o3d.utility.Vector3dVector(colors[:, :3])
+            if visualizar:
+                new_pos, new_col = draw_guild_lines(dic)
+                guild_points = o3d.geometry.PointCloud()
+                guild_points.points = o3d.utility.Vector3dVector(new_pos)
+                guild_points.colors = o3d.utility.Vector3dVector(new_col)
+                vis = o3d.visualization.Visualizer()
+                vis.create_window(width=960,height=540)
+                vis.add_geometry(pcl)
+                vis.add_geometry(guild_points)
+            for i in range(max_label+1):  #Ransac each label
+                  points = np.asarray(pcl.points)[labels==i]
+                  sph = pyrsc.Sphere()
+                  center, radius, inliers = sph.fit(points, thresh=0.01)
+                  centers = np.append(centers, center)
+                  sphere=o3d.geometry.TriangleMesh.create_sphere(radius)
+                  sphere.paint_uniform_color(np.asarray(pcl.colors)[labels==i][0])
+                  sphere=sphere.translate(center)
+                  if visualizar:
+                      vis.add_geometry(sphere)
+            centers=np.reshape(centers,(-1,3))
+            if visualizar:
+                a = vis.get_view_control()
+                vis.run()
+                vis.destroy_window()
     return centers
