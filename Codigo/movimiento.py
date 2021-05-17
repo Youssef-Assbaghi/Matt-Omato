@@ -37,10 +37,9 @@ class Movimiento:
         j0=90+Axis1*180/np.pi #joint0
         j1=90-Axis2*180/np.pi #joint1
         j2=180-Axis3*180/np.pi #joint2
-        j3=110-Axis4*180/np.pi #joint3
+        j3=180-Axis4*180/np.pi #joint3
         j4=Axis5 #joint5  Se ha dado en grados inicialmente
-        print(j0,j1,j2,j3,j4)
-        
+
         return j0*np.pi/180,j1*np.pi/180,j2*np.pi/180,j3*np.pi/180,j4*np.pi/180
         
         

@@ -82,14 +82,14 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
     centers = np.array([])
     dic = {"x":[-1.0,2], #rojo
            "z":[0.1,0.75], #azul
-            "y":[0.5,1.75]} #verde
+            "y":[-1.75,1.75]} #verde
     for u in range(u_res):
         for v in range(v_res):
                 w = int(v_res * u + v)
                 y =  far_clip * imgdaux[w] + near_clip
                 z = (-(u - u_res / 2.0) * y / focal_length)+0.6
                 x = (v - v_res / 2.0) * y / focal_length
-                aux_xyzv=np.array([x*cs-y*ss, x*ss+y*cs, z])
+                aux_xyzv=np.array([(x*cs-y*ss), (x*ss+y*cs), z])
                 if(pass_through_filter(dic,aux_xyzv)):  #pass through filter
                     auxhsv=rgb_to_hsl(img[u][v])
                     if((auxhsv[0]<0.15 or auxhsv[0]>0.85) and auxhsv[1]>0.60 and auxhsv[2]>0.20): #Threshold HSI

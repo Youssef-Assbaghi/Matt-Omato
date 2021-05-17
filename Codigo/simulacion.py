@@ -49,7 +49,7 @@ if __name__ == '__main__':
     print(Joint_Base, Joint_Hombro, Joint_Codo,Joint_Muneca,Joint_Cam,Joint_Pinza, sensorHandle)
     
     angulo=50
-    tomates=1
+    tomates=3
     vision_open3d=False
     """
     #POS HOME:
@@ -67,9 +67,12 @@ if __name__ == '__main__':
     for i in inf():
         errorCode, detectionState, detectedPoint, detectedObjectHandle, detectedSurfaceNormalVector=sim.simxReadProximitySensor(robot.clientID, ultra_dir, sim.simx_opmode_blocking)
         if detectionState:
+            if direccion==2:
+                break
             direccion=2
             ultra_dir=P_ST
             robot.setTargetPosition(Joint_Cam, np.pi/2)
+            angulo=angulo+90
             time.sleep(1.5)
         else:
             centers = pointcloud.Get_Image(sensorHandle,robot, angulo, vision_open3d)

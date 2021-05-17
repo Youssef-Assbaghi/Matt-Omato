@@ -46,15 +46,13 @@ class Robot:
         if self.pinza:   
             sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza, -0.2, sim.simx_opmode_oneshot)
             sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza1, -0.2, sim.simx_opmode_oneshot)
-            time.sleep(1)
             self.pinza=False
 
         else:
             sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza,0.2, sim.simx_opmode_oneshot)
             sim.simxSetJointTargetVelocity(self.clientID, Joint_Movimiento_Pinza1, 0.2, sim.simx_opmode_oneshot)
             self.pinza=True
-            time.sleep(1)
-            
+
 
     
     def getObjectHandler(self,part):
