@@ -64,6 +64,7 @@ if __name__ == '__main__':
         toma.append(auxv)
     direccion=1
     ultra_dir=P_SD
+    aux_giro=0
     for i in inf():
         errorCode, detectionState, detectedPoint, detectedObjectHandle, detectedSurfaceNormalVector=sim.simxReadProximitySensor(robot.clientID, ultra_dir, sim.simx_opmode_blocking)
         if detectionState:
@@ -74,6 +75,7 @@ if __name__ == '__main__':
             robot.setTargetPosition(Joint_Cam, np.pi/2)
             angulo=angulo+90
             time.sleep(1.5)
+            aux_giro=-0.001
         else:
             centers = pointcloud.Get_Image(sensorHandle,robot, angulo, vision_open3d)
             if len(centers)==0:#No se detecta tomate
@@ -84,16 +86,16 @@ if __name__ == '__main__':
                 print(centers)
                 for ce in centers:#En centers estan los tomates encontrados
                     pos=ce
-                    pos_correcion=[0.5,0.03,0.0]
+                    pos_correcion=[0.5,0.0,0.0]
                     posf=pos+pos_correcion
                     q=mov.coordenadas(posf[0],posf[1],posf[2])
                     robot.setTargetPosition(Joint_Base,q[0])
                     time.sleep(2)
                     robot.setTargetPosition(Joint_Codo, q[2])
                     time.sleep(2)
-                    robot.setTargetPosition(Joint_Muneca, q[3])
-                    time.sleep(2)
                     robot.setTargetPosition(Joint_Hombro,q[1])
+                    time.sleep(2)
+                    robot.setTargetPosition(Joint_Muneca, q[3])
                     time.sleep(2)
                     bestdists=99999
                     point=-1
@@ -110,7 +112,7 @@ if __name__ == '__main__':
                     time.sleep(2)
                     robot.setTargetPosition(Joint_Pinza,q[4])
                     time.sleep(2)
-                    pos = [-0.8, 0.0, 0.65]#posicion de la caja
+                    pos = [-0.8, 0.0+aux_giro, 0.71]#posicion de la caja
                     posf = pos
                     q = mov.coordenadas(posf[0], posf[1], posf[2])
 
