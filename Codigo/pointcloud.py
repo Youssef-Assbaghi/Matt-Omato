@@ -4,7 +4,7 @@ import math
 import open3d as o3d
 import matplotlib.pyplot as plt
 import pyransac3d as pyrsc
-
+import cv2
 
 def draw_guild_lines(dic, density = 0.01):
         x_start,x_end = dic["x"]
@@ -36,24 +36,6 @@ def draw_guild_lines(dic, density = 0.01):
         lines_z_color[:,2] = 1.0 #blue for z
         return np.concatenate((lines_x,lines_y,lines_z)),np.asmatrix(np.concatenate((lines_x_color,lines_y_color,lines_z_color)))
 
-def rgb_to_hsl(rgb):
-    I=(rgb[0]+ rgb[1] + rgb[2])/ 3.0
-
-    #Calculamos la S
-    minimo = min(rgb)
-    S = 1 - (3 / (rgb[0] + rgb[1] + rgb[2]+0.000001) * minimo)
-
-    #Calculamos la H
-    H=0
-    if rgb[0]!=0 and rgb[1]!=0 and rgb[2]!=0:
-        H = 0.5 * ((rgb[0] - rgb[1]) + (rgb[0] - rgb[2])) / (math.sqrt((rgb[0] - rgb[1])**2 + ((rgb[0] - rgb[2]) * (rgb[1] - rgb[2])))+0.000001)
-    H = math.acos(H)
-    if rgb[2] > rgb[1]:
-        H = 360 - H
-    H=H/360.0;
-
-    return [H, S, I]
-
 def pass_through_filter(dic, aux_xyzv):
     xbool=aux_xyzv[0]>=dic["x"][0] and aux_xyzv[0]<=dic["x"][1]
     ybool=aux_xyzv[1]>=dic["y"][0] and aux_xyzv[1]<=dic["y"][1]
@@ -63,9 +45,10 @@ def pass_through_filter(dic, aux_xyzv):
 def Get_Image(sensorHandle, robot, angulo, visualizar):
     retCode, resolution, imaged=sim.simxGetVisionSensorDepthBuffer(robot.clientID, sensorHandle,sim.simx_opmode_oneshot_wait)
     retCode, resolution, image=sim.simxGetVisionSensorImage(robot.clientID,sensorHandle,0,sim.simx_opmode_oneshot_wait)
-    img = np.array(image, dtype=np.uint8)
-    img.resize([resolution[1],resolution[0],3])
-    img=(np.flipud(img).astype(np.double))/255.0
+    img = np.absolute(np.array(image)).astype(np.float32)
+    img.resize([resolution[1], resolution[0], 3])
+    img = (np.flipud(img)) / 255.0
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
     imgd= np.array(imaged)
     imgd.resize([resolution[1],resolution[0]])
     imgd=np.flipud(imgd)
@@ -90,18 +73,15 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
                 z = (-(u - u_res / 2.0) * y / focal_length)+0.6
                 x = (v - v_res / 2.0) * y / focal_length
                 aux_xyzv=np.array([(x*cs-y*ss), (x*ss+y*cs), z])
-                if(pass_through_filter(dic,aux_xyzv)):  #pass through filter
-                    auxhsv=rgb_to_hsl(img[u][v])
-                    if((auxhsv[0]<0.15 or auxhsv[0]>0.85) and auxhsv[1]>0.60 and auxhsv[2]>0.20): #Threshold HSI
+                if pass_through_filter(dic, aux_xyzv):  #pass through filter
+                    auxhsv=[img[u][v][0]/360.0,img[u][v][2],img[u][v][1]]
+                    if ((auxhsv[0] < 0.20 or auxhsv[0] > 0.97) and auxhsv[1] > 0.60 and auxhsv[2] > 0.23): #Threshold HSI
                         xyzv = np.append(xyzv, aux_xyzv)
-                        hsiv = np.append(hsiv, img[u][v])
     if len(xyzv) != 0:
         xyzv=np.reshape(xyzv,(-1,3))
-        hsiv=np.reshape(hsiv,(-1,3))
         pcl = o3d.geometry.PointCloud()
         pcl.points = o3d.utility.Vector3dVector(xyzv)
-        pcl.colors = o3d.utility.Vector3dVector(hsiv)
-        labels = np.array(pcl.cluster_dbscan(eps=0.1, min_points=10))  #Clustering
+        labels = np.array(pcl.cluster_dbscan(eps=0.05, min_points=10))  #Clustering
         if  labels.size!=0:
             max_label = labels.max()
             colors = plt.get_cmap("tab20")(labels / (max_label))
@@ -116,6 +96,7 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
                 vis.create_window(width=960,height=540)
                 vis.add_geometry(pcl)
                 vis.add_geometry(guild_points)
+
             for i in range(max_label+1):  #Ransac each label
                   points = np.asarray(pcl.points)[labels==i]
                   sph = pyrsc.Sphere()
@@ -132,3 +113,4 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
                 vis.run()
                 vis.destroy_window()
     return centers
+
