@@ -66,9 +66,9 @@ if __name__ == '__main__':
         else:
             centers = pointcloud.Get_Image(sensorHandle,robot, angulo, vision_open3d)
             if len(centers)==0:#No se detecta tomate
-                robot.move(100,'Joint_DD0','Joint_DI0','Joint_TD0','Joint_TI0',direccion)
+                robot.move(100,'Joint_DD','Joint_DI','Joint_TD','Joint_TI',direccion)
                 time.sleep(1)
-                robot.move(0,'Joint_DD0','Joint_DI0','Joint_TD0','Joint_TI0',0)
+                robot.move(0,'Joint_DD','Joint_DI','Joint_TD','Joint_TI',0)
             else:#Se ha detectado un tomate, como minimo
                 print(centers)
                 for ce in centers:#En centers estan los tomates encontrados
