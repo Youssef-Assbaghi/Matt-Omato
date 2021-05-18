@@ -34,18 +34,18 @@ class Robot:
     def iniciar_robot(self):
         self.connect(19999)
         #SetJoints
-        ret,Joint_Base=self.getObjectHandler('Joint_Base0')
-        ret,Joint_Hombro=self.getObjectHandler('Joint_Hombro0')
-        ret,Joint_Codo=self.getObjectHandler('Joint_Codo0')
-        ret,Joint_Muneca=self.getObjectHandler('Joint_Muneca0')
+        ret,Joint_Base=self.getObjectHandler('Joint_Base')
+        ret,Joint_Hombro=self.getObjectHandler('Joint_Hombro')
+        ret,Joint_Codo=self.getObjectHandler('Joint_Codo')
+        ret,Joint_Muneca=self.getObjectHandler('Joint_Muneca')
         ret,Joint_Pinza=self.getObjectHandler('Joint_Pinza')
-        ret,Joint_Cam=self.getObjectHandler('Joint_Cam0')
+        ret,Joint_Cam=self.getObjectHandler('Joint_Cam')
         ret,Joint_Movimiento_Pinza=self.getObjectHandler('Barrett_openCloseJoint')
         ret,Joint_Movimiento_Pinza1=self.getObjectHandler('Barrett_openCloseJoint0')
         ret,P_SD=self.getObjectHandler('P_SD')
         ret,P_ST=self.getObjectHandler('P_ST')
         ret, FC = self.getObjectHandler('FC')
-        ret,sensorHandle = self.getObjectHandler('Vision_sensor0')
+        ret,sensorHandle = self.getObjectHandler('Vision_sensor')
         ret, dummy = self.getObjectHandler('Dummy')
         
         return Joint_Base,Joint_Hombro,Joint_Codo,Joint_Muneca,Joint_Pinza,Joint_Cam,Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1,P_SD,P_ST,FC,sensorHandle,dummy
