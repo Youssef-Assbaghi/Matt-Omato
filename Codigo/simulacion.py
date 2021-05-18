@@ -48,7 +48,7 @@ if __name__ == '__main__':
     
     print(Joint_Base, Joint_Hombro, Joint_Codo,Joint_Muneca,Joint_Cam,Joint_Pinza, sensorHandle)
     
-    angulo=0
+    angulo=50
     tomates=3
     vision_open3d=True
     """

@@ -73,9 +73,9 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
                 z = (-(u - u_res / 2.0) * y / focal_length)+0.6
                 x = (v - v_res / 2.0) * y / focal_length
                 aux_xyzv=np.array([(x*cs-y*ss), (x*ss+y*cs), z])
-                if(pass_through_filter(dic,aux_xyzv)):  #pass through filter
+                if pass_through_filter(dic, aux_xyzv):  #pass through filter
                     auxhsv=[img[u][v][0]/360.0,img[u][v][2],img[u][v][1]]
-                    if((auxhsv[0]<0.20 or auxhsv[0]>0.97) and auxhsv[1]>0.60): #Threshold HSI
+                    if ((auxhsv[0] < 0.20 or auxhsv[0] > 0.97) and auxhsv[1] > 0.60 and auxhsv[2] > 0.23): #Threshold HSI
                         xyzv = np.append(xyzv, aux_xyzv)
     if len(xyzv) != 0:
         xyzv=np.reshape(xyzv,(-1,3))
@@ -107,7 +107,6 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
                   sphere=sphere.translate(center)
                   if visualizar:
                       vis.add_geometry(sphere)
-
             centers=np.reshape(centers,(-1,3))
             if visualizar:
                 a = vis.get_view_control()
