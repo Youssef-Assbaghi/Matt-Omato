@@ -25,31 +25,13 @@ if __name__ == '__main__':
     q=[]
     print("Se crea el robot")
     robot = robot.Robot()
-    robot.connect(19999)
-
-    #SetJoints
-    ret,Joint_Base=robot.getObjectHandler('Joint_Base0')
-    ret,Joint_Hombro=robot.getObjectHandler('Joint_Hombro0')
-    ret,Joint_Codo=robot.getObjectHandler('Joint_Codo0')
-    ret,Joint_Muneca=robot.getObjectHandler('Joint_Muneca0')
-    ret,Joint_Pinza=robot.getObjectHandler('Joint_Pinza')
-    ret,Joint_Cam=robot.getObjectHandler('Joint_Cam0')
-    ret,Joint_Movimiento_Pinza=robot.getObjectHandler('Barrett_openCloseJoint')
-    ret,Joint_Movimiento_Pinza1=robot.getObjectHandler('Barrett_openCloseJoint0')
-    ret,P_SD=robot.getObjectHandler('P_SD')
-    ret,P_ST=robot.getObjectHandler('P_ST')
-    ret, FC = robot.getObjectHandler('FC')
-    ret,sensorHandle = robot.getObjectHandler('Vision_sensor0')
-    ret, dummy = robot.getObjectHandler('Dummy')
-
+    Joint_Base,Joint_Hombro,Joint_Codo,Joint_Muneca,Joint_Pinza,Joint_Cam,Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1,P_SD,P_ST,FC,sensorHandle,dummy=robot.iniciar_robot()
     mov=movimiento.Movimiento(robot.brazo,robot.antebrazo,robot.altura,robot.muñeca)
 
-
-    
-    print(Joint_Base, Joint_Hombro, Joint_Codo,Joint_Muneca,Joint_Cam,Joint_Pinza, sensorHandle)
+    print(Joint_Base,Joint_Hombro,Joint_Codo,Joint_Muneca,Joint_Pinza,Joint_Cam,Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1,P_SD,P_ST,FC,sensorHandle,dummy)
     
     angulo=50
-    tomates=3
+    tomates=12
     vision_open3d=False
     """
     #POS HOME:
@@ -88,7 +70,7 @@ if __name__ == '__main__':
                     pos=ce
                     pos_correcion=[0.5,0.0,0.0]
                     posf=pos+pos_correcion
-                    q=mov.coordenadas(posf[0],posf[1],posf[2])
+                    q=mov.coordenadas(posf[0],posf[1],posf[2])#Cinematica inversa a posf
                     robot.setTargetPosition(Joint_Base,q[0])
                     time.sleep(2)
                     robot.setTargetPosition(Joint_Codo, q[2])
@@ -108,24 +90,18 @@ if __name__ == '__main__':
                             point = toa
                     pos_d-point[1]
                     returncode=sim.simxSetObjectParent(robot.clientID, point[0],FC, True, sim.simx_opmode_blocking)
-                    robot.actuarPinza(Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1)
+                    robot.actuarPinza(Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1)#Cerrar pinza
                     time.sleep(2)
                     robot.setTargetPosition(Joint_Pinza,q[4])
                     time.sleep(2)
-                    pos = [-0.8, 0.0+aux_giro, 0.71]#posicion de la caja
-                    posf = pos
-                    q = mov.coordenadas(posf[0], posf[1], posf[2])
-                    robot.setTargetPosition(Joint_Codo, q[2])
-                    time.sleep(2)
-                    robot.setTargetPosition(Joint_Hombro, q[1])
-                    time.sleep(2)
-                    robot.setTargetPosition(Joint_Base, q[0])
-                    time.sleep(2)
-                    robot.setTargetPosition(Joint_Muneca, q[3])
-                    time.sleep(2)
+                    pos_caja = [-0.8, 0.0+aux_giro, 0.71]#posicion de la caja
+                    posf = pos_caja
+                    q = mov.coordenadas(posf[0], posf[1], posf[2])#Cinematica inversa a posf
+                    robot.ir_caja(Joint_Base,Joint_Hombro,Joint_Codo,Joint_Muneca,q)#Ir a la posicion de la caja
+                   
                     #Deshacemos la relacion padre-hijo
                     returncode=sim.simxSetObjectParent(robot.clientID, point[0], -1, True, sim.simx_opmode_blocking)
-                    robot.actuarPinza(Joint_Movimiento_Pinza, Joint_Movimiento_Pinza1)
+                    robot.actuarPinza(Joint_Movimiento_Pinza, Joint_Movimiento_Pinza1)#Abrir pinza
                     time.sleep(0.5)
                     sim.simxSetObjectIntParameter(robot.clientID, point[0], sim.sim_shapeintparam_static, 0, sim.simx_opmode_oneshot)
                     time.sleep(1.5)
