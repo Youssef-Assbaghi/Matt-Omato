@@ -48,9 +48,9 @@ if __name__ == '__main__':
     
     print(Joint_Base, Joint_Hombro, Joint_Codo,Joint_Muneca,Joint_Cam,Joint_Pinza, sensorHandle)
     
-    angulo=50
+    angulo=0
     tomates=3
-    vision_open3d=False
+    vision_open3d=True
     """
     #POS HOME:
     robot.posHome(Joint_Base,Joint_Hombro,Joint_Codo,Joint_Muneca,Joint_Pinza)
