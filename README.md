@@ -18,10 +18,10 @@
       * [Inverse kinematics algorithm](#6)
    * [Simulation](#7)
    * [Testing and results](#8)
-   * [3D pieces](#9)
-   * [Amazing contributions](#9)   
-   * [Video](#10)
-   * [Authors](#11)
+   * [3D Pieces](#9)
+   * [Amazing contributions](#10)   
+   * [Video](#11)
+   * [Authors](#12)
 
 
 
@@ -83,4 +83,44 @@ In order to test Matt-Omato it has been necessary to use the CoppeliaSim softwar
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
 |<img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119180838-19b07e80-ba71-11eb-97f6-aae2400aa4f3.gif">  Simple scene |  <img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119180891-2f25a880-ba71-11eb-8bc7-0e4447b9d191.gif"> Intermediate scene|<img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119180920-38af1080-ba71-11eb-8b8e-4548070ea1fc.gif"> Difficult scene|
- 
+
+# Testing and results <a name="8"></a>
+To verify how good the proposed solution is, each of the created scenes has been run several times to check the accuracy of the XYZ coordinates of the tomatoes calculated by the computer vision algorithm and the coordinates of the tomatoes in CoppeliaSim. The results can be seen in the following table:
+| Escena | Tomates | Error Total X | Error Medio X | Error Total Y | Error Medio Y  | Error Total Z | Error Medio Z  | Distancia Euclidiana | Error Medio Total |
+|--------|---------|---------------|---------------|---------------|----------------|---------------|----------------|----------------------|-------------------|
+|      1 |       4 |       0,10431 |     0,0260775 |      -0,13623 |     -0,0340575 |        0,0633 |       0,015825 |              0,21308 |           0,05327 |
+|      2 |       8 |      0,330662 |    0,04133275 |      -0,42686 |     -0,0533575 |       0,07016 |        0,00877 |              0,54757 |        0,06844625 |
+|      3 |       7 |        0,2093 |        0,0299 |      -0,28257 |   -0,040367143 |      0,103086 |    0,014726571 |               0,3822 |            0,0546 |
+|      4 |       8 |        0,3357 |     0,0419625 |       -0,4614 |      -0,057675 |       0,10121 |     0,01265125 |              1,16614 |         0,1457675 |
+|      5 |      13 |    0,52457715 | 0,04035208846 |   -0,77592288 | -0,05968637539 |    0,05861645 | 0,004508957692 |            0,9649308 |      0,0742254435 |
+|      6 |      12 |    0,40989956 | 0,03415829667 |   -0,67678181 | -0,05639848417 |    0,03389403 |   0,0028245025 |            0,8138425 |     0,06782020461 |
+|      7 |       8 |    0,30705157 | 0,03838144625 |   -0,46826173 | -0,05853271625 |    0,04832574 |   0,0060407175 |         0,5731481238 |     0,07164351548 |
+|      8 |      26 |       0,92196 |       0,03546 |     -1,291836 |      -0,049686 |      0,091208 |       0,003508 |          1,589707329 |     0,06114258958 |
+|      9 |      36 |       1,32336 |       0,03676 |     -1,968696 |      -0,054686 |     0,0455445 |    0,001265125 |          2,372576644 |     0,06590490678 |
+|     10 |      16 |        0,5264 |        0,0329 |      -0,67744 |       -0,04234 |         0,152 |         0,0095 |         0,8712783215 |      0,0544548951 |
+
+# 3D Pieces <a name="9"></a>
+The following parts have been designed using TinkerCad software, the files can be found in the "Piezas 3D" folder.
+
+
+| | | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|
+|<img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119190607-df011300-ba7d-11eb-8406-37dc23d967e1.png">  Robotic arm base |  <img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119190690-fb04b480-ba7d-11eb-93e5-c55214c344cc.png"> Arm 1|<img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119190735-07890d00-ba7e-11eb-9181-d9d77036962d.png"> Arm 2 | <img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119190797-18398300-ba7e-11eb-8560-a555de1d636f.png"> Wrist |
+|<img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119190845-29828f80-ba7e-11eb-835f-4a08f5819716.png">  Robot base |  <img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119190892-38694200-ba7e-11eb-9afd-76f2c7ae8886.png"> Wheels |<img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119191030-6d759480-ba7e-11eb-8fc5-d7f1fc7cca7e.jpg"> Box | <img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119191082-7c5c4700-ba7e-11eb-8829-93172e3e1ad4.jpg"> Gripper finger |
+|<img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119191287-b594b700-ba7e-11eb-9b69-91bcc0fa4724.jpg"> Wheel support |  <img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119191354-ce04d180-ba7e-11eb-81c8-5766e4b661d9.jpg"> Camera support|<img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119191403-db21c080-ba7e-11eb-9687-b08ea0b842e0.jpg"> Proximity sensor|
+
+# Amazing contributions <a name="10"></a>
+This project is designed to facilitate and expedite the arduous task of harvesting. In this country, the agricultural sector is still a fundamental part. In places like Andalusia or Extremadura, most of the population is dedicated to it. In Almeria, for example, a city in Andalusia, is known for the large extensions of greenhouses, where apart from planting other fruits and vegetables, tomatoes are the most frequent. That is why with this project we want to help farmers to facilitate and avoid the physical work involved, as we know firsthand that it is a very difficult job.
+
+Our project has an interesting point from the harvesting point of view, as we pick the tomatoes with a 3 finger-gripper to ensure the right grip. With a rotation of the gripper, we get the tomato to pluck smoothly and without jerky gestures.
+
+Matt-Omato only needs the human hand to start up. Once it is turned on, it will autonomously do all the work of harvesting tomatoes in a line of tomato plants thanks to the built-in rails that make it not deviate from its straight trajectory.
+
+With the computer vision part, we want to provide our robot with good efficiency, as working with point clouds and RGB-D camera can make the acquisition and detection of tomatoes easier, faster and more efficient.
+
+# Video <a name="11"></a>
+# Authors <a name="12"></a>
+- Alejandro Miranda Herrero - 1527892
+- Martí Arnaus Comellas - 1530039
+- Youssef Assbaghi Asbahi - 1493477
+- Pablo Mora Claros - 1493293
