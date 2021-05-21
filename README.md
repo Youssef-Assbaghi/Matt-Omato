@@ -51,13 +51,14 @@ In order to develop the software part of Matt-Omato, we have divided the develop
 
 In the diagram below you can see Matt-Omato's internal process in relation to the software. In it, there are two differentiated parts. On the one hand we have everything related to the computer vision that is going to be able to detect the tomatoes and get the coordinates of them. And on the other hand we have the calculation of the position of the robotic arm thanks to the inverse kinematics.
 
-<img src="https://user-images.githubusercontent.com/65310531/119173768-fb925080-ba67-11eb-863e-a49f76284118.png" align="center" width="700" alt="software_scheme"/>
+<img src="https://user-images.githubusercontent.com/65310531/119173768-fb925080-ba67-11eb-863e-a49f76284118.png" align="center" width="500" alt="software_scheme"/>
 
 ## 3D Point Cloud tomato detection <a name="5"></a>
  <img src="https://user-images.githubusercontent.com/65310531/119176651-a9532e80-ba6b-11eb-9cd7-0cd376f4e653.png" align="right" width="370" alt="cloud"/>
  In order to provide Matt-Omato with computer vision, it has been necessary to integrate an RGB-D camera that provides depth and color information. Thanks to this we are able to create the 3D point cloud of the scene.
  
 In order to obtain the coordinates of the tomatoes at the end of the computer vision algorithm, the following steps have been followed to facilitate our work on the 3D point cloud and tomato detection
+
  
  ### HSI Threshold <a name="HSI"></a>
   
@@ -67,10 +68,21 @@ In order to obtain the coordinates of the tomatoes at the end of the computer vi
   ### PassThrough Filter <a name="P"></a>
   At this stage the total number of points within the 3D cloud is reduced. The idea is to define a bounding box that limits us to a range in which to keep only those points that fall inside. In this way we will only keep the tomatoes that are close to the camera and remove those background points that the camera can detect. This will make the execution time very small.
   
-  ### Clustering and RANSAC <a name="P"></a>
+  ### Clustering and RANSAC <a name="CR"></a>
   
   In order to detect all the tomatoes in the scene individually, it is necessary to develop an algorithm capable of separating all the groups of points. That is why we have used a clustering algorithm which allows us to group the points by groups establishing the minimum amount of points that we want to have to form one. In this way we also avoid possible noise that may have crept in from the previous stages.
 
 Finally, in order to obtain the coordinates of the tomatoes, we have used a RANSAC algorithm to adjust the points of each cluster to the sphere shape defined by RANSAC. Using the "pyRansac3D" library we are able to obtain the centers of these spheres and therefore the centers of the tomatoes.
 
+Requirements: Python 3, and its libraries numpy, math, matplotlib, cv2, open3d and pyransac3d
+
+## Inverse Kinematics <a name="6"></a>
+
+# Simulation <a name="6"></a>
+In order to test Matt-Omato it has been necessary to use the CoppeliaSim software where we have the whole robot recreated in real size with all the hardware components and all the software components (Python). We have a total of 10 scenes where the difficulty varies according to the number of tomato plants, the number of tomatoes in each tomato plant, the size of the tomatoes and the color of the tomatoes.
+
+
+| | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|
+|<img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119180838-19b07e80-ba71-11eb-97f6-aae2400aa4f3.gif">  Simple scene |  <img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119180891-2f25a880-ba71-11eb-8bc7-0e4447b9d191.gif"> Intermediate scene|<img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119180920-38af1080-ba71-11eb-8b8e-4548070ea1fc.gif"> Difficult scene|
  
