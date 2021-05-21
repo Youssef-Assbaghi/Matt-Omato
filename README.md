@@ -78,10 +78,8 @@ Requirements: Python 3, and its libraries numpy, math, matplotlib, cv2, open3d a
 
 ## Inverse Kinematics <a name="6"></a>
 
-# Simulation <a name="6"></a>
+# Simulation <a name="7"></a>
 In order to test Matt-Omato it has been necessary to use the CoppeliaSim software where we have the whole robot recreated in real size with all the hardware components and all the software components (Python). We have a total of 10 scenes where the difficulty varies according to the number of tomato plants, the number of tomatoes in each tomato plant, the size of the tomatoes and the color of the tomatoes.
-
-
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
 |<img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119180838-19b07e80-ba71-11eb-97f6-aae2400aa4f3.gif">  Simple scene |  <img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119180891-2f25a880-ba71-11eb-8bc7-0e4447b9d191.gif"> Intermediate scene|<img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119180920-38af1080-ba71-11eb-8b8e-4548070ea1fc.gif"> Difficult scene|
