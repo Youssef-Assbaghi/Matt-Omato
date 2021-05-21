@@ -54,7 +54,7 @@ In the diagram below you can see Matt-Omato's internal process in relation to th
 <img src="https://user-images.githubusercontent.com/65310531/119173768-fb925080-ba67-11eb-863e-a49f76284118.png" align="center" width="700" alt="software_scheme"/>
 
 ## 3D Point Cloud tomato detection <a name="5"></a>
- <img src="https://user-images.githubusercontent.com/65310531/119176651-a9532e80-ba6b-11eb-9cd7-0cd376f4e653.png" align="right" width="300" alt="cloud"/>
+ <img src="https://user-images.githubusercontent.com/65310531/119176651-a9532e80-ba6b-11eb-9cd7-0cd376f4e653.png" align="right" width="350" alt="cloud"/>
  In order to provide Matt-Omato with computer vision, it has been necessary to integrate an RGB-D camera that provides depth and color information. Thanks to this we are able to create the 3D point cloud of the scene.
  
 In order to obtain the coordinates of the tomatoes at the end of the computer vision algorithm, the following steps have been followed to facilitate our work on the 3D point cloud and tomato detection
