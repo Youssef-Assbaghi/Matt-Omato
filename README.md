@@ -120,7 +120,7 @@ With the computer vision part, we want to provide our robot with good efficiency
 
 # Video <a name="11"></a>
 # Authors <a name="12"></a>
-- Alejandro Miranda Herrero - 1527892
-- Martí Arnaus Comellas - 1530039
-- Youssef Assbaghi Asbahi - 1493477
-- Pablo Mora Claros - 1493293
+- Alejandro Miranda Herrero - 1527892 - <a href="https://github.com/AlejandroMirandaHerrero">Github</a>
+- Martí Arnaus Comellas - 1530039 - <a href="https://github.com/marti1900">Github</a>
+- Youssef Assbaghi Asbahi - 1493477 - <a href="https://github.com/Youssef-Assbaghi">Github</a>
+- Pablo Mora Claros - 1493293 - <a href="https://github.com/pabloomc99">Github</a>
