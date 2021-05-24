@@ -88,8 +88,10 @@ In order to detect all tomatoes in the scene individually, it is necessary to de
 Finally, in order to obtain the coordinates of the tomatoes, we have used a RANSAC algorithm to adjust the points of each cluster to the sphere shape defined by RANSAC. Using the "pyRansac3D" library we are able to obtain the centers of these spheres and therefore the centers of the tomatoes.
 
 
-## Inverse Kinematics <a name="6"></a>
-To solve the inverse kinematics part, we do it geometrically, where it is necessary to know the distance between each joint as well as the inclination in degrees of the arm pitch.
+## Inverse Kinematics with geometrical method and kinematic decoupling <a name="6"></a>
+To solve the inverse kinematics part, we do it geometrically, where it is necessary to know the distance between each joint as well as the inclination in degrees of the arm pitch. We used kinematic decoupoling, that is a calculation made by Pieper, in 1968 who achieved the the point of the gripper.
+
+We use Euler angles. We can get these angles with the elevation and turn of the gripper.With these options we get some complex equations which give more than one result (singular points).
 
 This will allow us to move the Matt-Omato robotic arm to any 3D coordinate that results in the computer vision part. The actuator located at the tip of the robotic arm allows us to correctly pick up the tomato without any damages.
 
