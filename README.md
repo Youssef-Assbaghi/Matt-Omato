@@ -8,6 +8,7 @@
  <img src="https://user-images.githubusercontent.com/65310531/119140989-0d163100-ba45-11eb-8d57-a9c2259c4ec3.jpg" align="right" width="300" alt="header"/>
 
    * [What is this?](#1)
+   * [Requeriments](#R)
    * [Description](#2)
    * [Hardware Scheme](#3)
    * [Software Architecture](#4)
@@ -16,6 +17,7 @@
         * [PassThrough Filter](#P)
         * [Clustering and RANSAC](#CR)
       * [Inverse kinematics algorithm](#6)
+      * [Movement](#M)
    * [Simulation](#7)
    * [Testing and results](#8)
    * [3D Pieces](#9)
@@ -26,8 +28,20 @@
 
 
 # What is this? <a name="1"></a>
-This project is related to the subject of the third-year computing mention at the UAB of "Robotics, Language and Planning" . In it, a project of the creation of a robot through simulations has been carried out .
+This project is related to the subject of the third-year computing mention at the UAB of "Robotics, Language and Planning" . In it, a project of the creation of a robot through simulations has been carried out. In this repository you can find everything you need to run and test the robot. It includes all the Python code and the CoppeliaSim scenes to test Matt-Omato. To see more detailed information about the project, please read the report carefully
+# Requeriments <a name="R"></a>
+For running each sample code:
 
+- Python 3.7
+
+- numpy
+
+- math
+
+- matplotlib
+- cv2
+- <a href="http://www.open3d.org/docs/release/getting_started.html">open3d</a>
+- <a href="https://leomariga.github.io/pyRANSAC-3D/">pyRANSAC3D</a>
 # Description <a name="2"></a>
 Matt-Omato is a robot capable of harvesting tomatoes autonomously through different growing lines and deposit them in a box attached to the base.
 
@@ -54,11 +68,10 @@ In the diagram below you can see Matt-Omato's internal process in relation to th
 <img src="https://user-images.githubusercontent.com/65310531/119173768-fb925080-ba67-11eb-863e-a49f76284118.png" align="center" width="500" alt="software_scheme"/>
 
 ## 3D Point Cloud tomato detection <a name="5"></a>
- <img src="https://user-images.githubusercontent.com/65310531/119176651-a9532e80-ba6b-11eb-9cd7-0cd376f4e653.png" align="right" width="370" alt="cloud"/>
+ <img src="https://user-images.githubusercontent.com/65310531/119176651-a9532e80-ba6b-11eb-9cd7-0cd376f4e653.png" align="right" width="320" alt="cloud"/>
  In order to provide Matt-Omato with computer vision, it has been necessary to integrate an RGB-D camera that provides depth and color information. Thanks to this we are able to create the 3D point cloud of the scene.
  
-In order to obtain the coordinates of the tomatoes at the end of the computer vision algorithm, the following steps have been followed to facilitate our work on the 3D point cloud and tomato detection
-
+In order to obtain the coordinates of the tomatoes at the end of the computer vision algorithm, the following steps have been followed to facilitate our work on the 3D point cloud and tomato detection.
  
  ### HSI Threshold <a name="HSI"></a>
   
@@ -74,9 +87,28 @@ In order to obtain the coordinates of the tomatoes at the end of the computer vi
 
 Finally, in order to obtain the coordinates of the tomatoes, we have used a RANSAC algorithm to adjust the points of each cluster to the sphere shape defined by RANSAC. Using the "pyRansac3D" library we are able to obtain the centers of these spheres and therefore the centers of the tomatoes.
 
-Requirements: Python 3, and its libraries numpy, math, matplotlib, cv2, open3d and pyransac3d
 
 ## Inverse Kinematics <a name="6"></a>
+To solve the inverse kinematics part, we do it geometrically, where it is necessary to know the distance between each joint as well as the inclination in degrees of the arm pitch.
+
+This will allow us to move the Matt-Omato robotic arm to any 3D coordinate that results in the computer vision part. The actuator located at the tip of the robotic arm allows us to correctly pick up the tomato without any damage.
+
+## Movement <a name="M"></a>
+<img src="https://user-images.githubusercontent.com/65310531/119307007-4def8f00-bc6b-11eb-8a46-fb86680cb764.png" align="right" width="250" alt="cloud"/>
+In order to be able to move Matt-Omato autonomously, he has been provided with two distance sensors capable of detecting any element in front of or behind him. 
+
+Matt-Omato starts his movement in a straight line thanks to the rails and cannot deviate from them. The steps that Matt-Omato follows internally for the movement are as follows:
+1. Does the depth sensor detect any element in front of it?
+2. If it detects any element
+   - Rotate camera joint to point to the other line of tomato plants
+3. If no element is detected
+   - Runs computer vision algorithm
+   - If it detects a tomato
+      - Performs inverse kinematics
+      - Takes the tomato and places it in the box
+   - If it does not detect tomato
+      - Moves in the indicated direction for one second
+      - Back to point 1
 
 # Simulation <a name="7"></a>
 In order to test Matt-Omato it has been necessary to use the CoppeliaSim software where we have the whole robot recreated in real size with all the hardware components and all the software components (Python). We have a total of 10 scenes where the difficulty varies according to the number of tomato plants, the number of tomatoes in each tomato plant, the size of the tomatoes and the color of the tomatoes.
