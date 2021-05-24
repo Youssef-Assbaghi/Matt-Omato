@@ -58,13 +58,12 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
     near_clip=0.01
     far_clip=3.5
     xyzv=np.array([])
-    hsiv=np.array([])
     focal_length = (640.0/2.0) / math.tan((83.0/2.0) * np.pi/ 180)
     ss = math.sin(math.radians(angulo))
     cs = math.cos(math.radians(angulo))
     centers = np.array([])
-    dic = {"x":[-1.0,2], #rojo
-           "z":[0.1,0.75], #azul
+    dic = {"x":[-1,2], #rojo
+           "z":[0.025,1], #azul
             "y":[-1.75,1.75]} #verde
     for u in range(u_res):
         for v in range(v_res):
@@ -81,7 +80,7 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
         xyzv=np.reshape(xyzv,(-1,3))
         pcl = o3d.geometry.PointCloud()
         pcl.points = o3d.utility.Vector3dVector(xyzv)
-        labels = np.array(pcl.cluster_dbscan(eps=0.05, min_points=10))  #Clustering
+        labels = np.array(pcl.cluster_dbscan(eps=0.05, min_points=20))  #Clustering
         if  labels.size!=0:
             max_label = labels.max()
             colors = plt.get_cmap("tab20")(labels / (max_label))
@@ -101,16 +100,16 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
                   points = np.asarray(pcl.points)[labels==i]
                   sph = pyrsc.Sphere()
                   center, radius, inliers = sph.fit(points, thresh=0.01)
-                  centers = np.append(centers, center)
-                  sphere=o3d.geometry.TriangleMesh.create_sphere(radius)
-                  sphere.paint_uniform_color(np.asarray(pcl.colors)[labels==i][0])
-                  sphere=sphere.translate(center)
-                  if visualizar:
-                      vis.add_geometry(sphere)
+                  if pass_through_filter(dic, center) and radius<=0.1 and radius>=0.01:
+                      centers = np.append(centers, center)
+                      sphere=o3d.geometry.TriangleMesh.create_sphere(radius)
+                      sphere.paint_uniform_color(np.asarray(pcl.colors)[labels==i][0])
+                      sphere=sphere.translate(center)
+                      if visualizar:
+                          vis.add_geometry(sphere)
             centers=np.reshape(centers,(-1,3))
             if visualizar:
-                a = vis.get_view_control()
+                vis.get_view_control()
                 vis.run()
-                vis.destroy_window()
     return centers
 

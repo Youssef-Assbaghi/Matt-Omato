@@ -32,11 +32,12 @@ if __name__ == '__main__':
     
     angulo=50
 
-    tomates=12
-    vision_open3d=False
+    intp = input("¿Quiere visualizar la nube de puntos en cada iteracion? [Y/N]: ")
+    if intp=='Y' or intp=='y':
+        vision_open3d=True
+    else:
+        vision_open3d=False
 
-    tomates=3
-    vision_open3d=True
 
     """
     #POS HOME:
@@ -44,11 +45,16 @@ if __name__ == '__main__':
     """
     #Aqui cogemos todos los Handles de los tomates
     toma=[]
-    for i in range(tomates):
+    i=0
+    while True:
         ret, sphere = robot.getObjectHandler('Tomate'+str(i))
-        auxv = [sphere]
-        auxv.append(np.array(sim.simxGetObjectPosition(robot.clientID,sphere,-1,sim.simx_opmode_blocking)[1]))
-        toma.append(auxv)
+        if ret==0:
+            auxv = [sphere]
+            auxv.append(np.array(sim.simxGetObjectPosition(robot.clientID,sphere,-1,sim.simx_opmode_blocking)[1]))
+            toma.append(auxv)
+            i = i + 1
+        else:
+            break
     direccion=1
     ultra_dir=P_SD
     aux_giro=0
@@ -65,6 +71,7 @@ if __name__ == '__main__':
             aux_giro=-0.001
         else:
             centers = pointcloud.Get_Image(sensorHandle,robot, angulo, vision_open3d)
+
             if len(centers)==0:#No se detecta tomate
                 robot.move(100,'Joint_DD','Joint_DI','Joint_TD','Joint_TI',direccion)
                 time.sleep(1)
@@ -73,17 +80,17 @@ if __name__ == '__main__':
                 print(centers)
                 for ce in centers:#En centers estan los tomates encontrados
                     pos=ce
-                    pos_correcion=[0.5,0.0,0.0]
+                    pos_correcion=[0.475,0.035,0.0]
                     posf=pos+pos_correcion
                     q=mov.coordenadas(posf[0],posf[1],posf[2])#Cinematica inversa a posf
                     robot.setTargetPosition(Joint_Base,q[0])
                     time.sleep(2)
                     robot.setTargetPosition(Joint_Codo, q[2])
-                    time.sleep(2)
+                    time.sleep(1)
                     robot.setTargetPosition(Joint_Hombro,q[1])
-                    time.sleep(2)
+                    time.sleep(1)
                     robot.setTargetPosition(Joint_Muneca, q[3])
-                    time.sleep(2)
+                    time.sleep(1)
                     bestdists=99999
                     point=-1
                     #Para conseguir la relación padre-hijo, necesitamos saber que tomate estamos cogiendo
@@ -93,17 +100,15 @@ if __name__ == '__main__':
                         if(auxdist<bestdists):
                             bestdists = auxdist
                             point = toa
-                    pos_d-point[1]
                     returncode=sim.simxSetObjectParent(robot.clientID, point[0],FC, True, sim.simx_opmode_blocking)
                     robot.actuarPinza(Joint_Movimiento_Pinza,Joint_Movimiento_Pinza1)#Cerrar pinza
                     time.sleep(2)
                     robot.setTargetPosition(Joint_Pinza,q[4])
-                    time.sleep(2)
-                    pos_caja = [-0.8, 0.0+aux_giro, 0.71]#posicion de la caja
+                    time.sleep(1.5)
+                    pos_caja = [-0.8, 0.0+aux_giro, 0.60]#posicion de la caja
                     posf = pos_caja
                     q = mov.coordenadas(posf[0], posf[1], posf[2])#Cinematica inversa a posf
                     robot.ir_caja(Joint_Base,Joint_Hombro,Joint_Codo,Joint_Muneca,q)#Ir a la posicion de la caja
-                   
                     #Deshacemos la relacion padre-hijo
                     returncode=sim.simxSetObjectParent(robot.clientID, point[0], -1, True, sim.simx_opmode_blocking)
                     robot.actuarPinza(Joint_Movimiento_Pinza, Joint_Movimiento_Pinza1)#Abrir pinza
