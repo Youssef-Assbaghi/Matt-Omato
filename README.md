@@ -76,14 +76,14 @@ In order to obtain the coordinates of the tomatoes at the end of the computer vi
  ### HSI Threshold <a name="HSI"></a>
   
 
- At this stage we pass the RGB values obtained by the camera to the HSI color space which is more similar to human vision and easier to parameterize. Once we have the point cloud in this color space, we have defined a threshold which will allow us to keep only those points we are interested in. In this case with tomato colors such as medium ripe green, orange about to ripen and deep red representing a ripe tomato. These are the colors that we accept that Matt-Omato harvests.
+At this stage we pass the RGB values obtained by the camera to the HSI color space which is more similar to human vision and easier to parameterize. Once we have the point cloud in this color space, we have defined a threshold which will allow us to keep only those points we are interested in. In this case with tomato colors such as medium ripe green, orange about to ripen and deep red representing a ripe tomato. These are the colors that we accept that Matt-Omato harvests.
  
   ### PassThrough Filter <a name="P"></a>
-  At this stage the total number of points within the 3D cloud is reduced. The idea is to define a bounding box that limits us to a range in which to keep only those points that fall inside. In this way we will only keep the tomatoes that are close to the camera and remove those background points that the camera can detect. This will make the execution time very small.
+At this stage the total number of points within the 3D cloud is reduced. The idea is to define a bounding box that limits us to a range in which to keep only those points that fall inside. In this way we will only keep the tomatoes that are close to the camera and remove those background points that the camera can detect. This will make the execution time very small.
   
   ### Clustering and RANSAC <a name="CR"></a>
   
-  In order to detect all tomatoes in the scene individually, it is necessary to develop an algorithm capable of separating all the groups of points. That is why we have used a clustering algorithm which allows us to group the points by groups establishing the minimum amount of points that we want to have to form one. In this way we also avoid possible noise that may have crept in from the previous stages.
+In order to detect all tomatoes in the scene individually, it is necessary to develop an algorithm capable of separating all the groups of points. That is why we have used a clustering algorithm which allows us to group the points by groups establishing the minimum amount of points that we want to have to form one. In this way we also avoid possible noise that may have crept in from the previous stages.
 
 Finally, in order to obtain the coordinates of the tomatoes, we have used a RANSAC algorithm to adjust the points of each cluster to the sphere shape defined by RANSAC. Using the "pyRansac3D" library we are able to obtain the centers of these spheres and therefore the centers of the tomatoes.
 
@@ -103,21 +103,22 @@ Matt-Omato starts his movement in a straight line thanks to the rails and cannot
    - Rotate camera joint to point to the other line of tomato plants
 3. If no element is detected
    - Runs computer vision algorithm
-   - If it detects a tomato
+   - If detects a tomato
       - Performs inverse kinematics
-      - Takes the tomato and places it in the box
-   - If it does not detect tomato
+      - Takes the tomato and place it in the box
+   - If does not detect tomato
       - Moves in the indicated direction for one second
       - Back to point 1
 
 # Simulation <a name="7"></a>
-In order to test Matt-Omato it has been necessary to use the CoppeliaSim software where we have the whole robot recreated in real size with all the hardware components and all the software components (Python). We have a total of 10 scenes where the difficulty varies according to the number of tomato plants, the number of tomatoes in each tomato plant, the size of the tomatoes and the color of the tomatoes.
+In order to test Matt-Omato it has been necessary to use the CoppeliaSim software where we have the whole robot recreated in real size with all the hardware components and all the software components (Python). We have a total of 10 scenes where the difficulty increases according to the number of tomato plants, the number of tomatoes in each tomato plant, the size of the tomatoes and the color of the tomatoes.
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
 |<img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119239761-74b6a400-bb4b-11eb-82d9-56d343d569ad.gif">  Simple scene |  <img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119310553-2ea73080-bc70-11eb-9d92-2285698fcf6a.gif"> Intermediate scene|<img width="1604" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119310578-36ff6b80-bc70-11eb-956c-9d987a9432ff.gif"> Difficult scene|
 
 # Testing and results <a name="8"></a>
 To verify how good the proposed solution is, each of the created scenes has been run several times to check the accuracy of the XYZ coordinates of the tomatoes calculated by the computer vision algorithm and the coordinates of the tomatoes in CoppeliaSim. The results can be seen in the following table:
+
 | Escena | Tomates | Error Total X | Error Medio X | Error Total Y | Error Medio Y  | Error Total Z | Error Medio Z  | Distancia Euclidiana | Error Medio Total |
 |--------|---------|---------------|---------------|---------------|----------------|---------------|----------------|----------------------|-------------------|
 |      1 |       4 |       0,10431 |     0,0260775 |      -0,13623 |     -0,0340575 |        0,0633 |       0,015825 |              0,21308 |           0,05327 |
@@ -142,7 +143,7 @@ The following parts have been designed using TinkerCad software, the files can b
 |<img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119191287-b594b700-ba7e-11eb-9b69-91bcc0fa4724.jpg"> Wheel support |  <img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119191354-ce04d180-ba7e-11eb-81c8-5766e4b661d9.jpg"> Camera support|<img width="800" alt="screen shot 2017-08-07 at 12 18 15 pm" src="https://user-images.githubusercontent.com/65310531/119191403-db21c080-ba7e-11eb-9687-b08ea0b842e0.jpg"> Proximity sensor|
 
 # Amazing contributions <a name="10"></a>
-This project is designed to facilitate and expedite the arduous task of harvesting. In this country, the agricultural sector is still a fundamental part. In places like Andalusia or Extremadura, most of the population is dedicated to it. In Almeria, for example, a city in Andalusia, is known for the large extensions of greenhouses, where apart from planting other fruits and vegetables, tomatoes are the most frequent. That is why with this project we want to help farmers to facilitate and avoid the physical work involved, as we know firsthand that it is a very difficult job.
+This project is designed to facilitate and expedite the arduous task of harvesting. In this country, the agricultural sector is still a fundamental part. In places like Andalusia or Extremadura, most of the population is dedicated to it. In Almeria, for example, a city in Andalusia, is known for the large extensions of greenhouses, where apart from planting other kind of fruits and vegetables, tomatoes are the most frequent. The reason why we did this project is that we want to help farmers to facilitate and avoid the physical work involved, as we know firsthand that it is a very difficult job.
 
 Our project has an interesting point from the harvesting point of view, as we pick the tomatoes with a 3 finger-gripper to ensure the right grip. With a rotation of the gripper, we get the tomato to pluck smoothly and without jerky gestures.
 
