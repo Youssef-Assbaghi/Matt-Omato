@@ -65,7 +65,7 @@ In order to develop the software part of Matt-Omato, we have divided the develop
 
 In the diagram below you can see Matt-Omato's internal process in relation to the software. In it, there are two differentiated parts. On the one hand we have everything related to the computer vision that is going to be able to detect the tomatoes and get the coordinates of them. And on the other hand we have the calculation of the position of the robotic arm thanks to the inverse kinematics.
 
-<img src="https://user-images.githubusercontent.com/65310531/119173768-fb925080-ba67-11eb-863e-a49f76284118.png" align="center" width="500" alt="software_scheme"/>
+<img src="https://user-images.githubusercontent.com/65310531/119315245-f145a180-bc75-11eb-8d6a-ff82f964df6d.png" align="center" width="500" alt="software_scheme"/>
 
 ## 3D Point Cloud tomato detection <a name="5"></a>
  <img src="https://user-images.githubusercontent.com/65310531/119176651-a9532e80-ba6b-11eb-9cd7-0cd376f4e653.png" align="right" width="320" alt="cloud"/>
