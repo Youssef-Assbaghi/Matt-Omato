@@ -83,7 +83,7 @@ In order to obtain the coordinates of the tomatoes at the end of the computer vi
   
   ### Clustering and RANSAC <a name="CR"></a>
   
-  In order to detect all the tomatoes in the scene individually, it is necessary to develop an algorithm capable of separating all the groups of points. That is why we have used a clustering algorithm which allows us to group the points by groups establishing the minimum amount of points that we want to have to form one. In this way we also avoid possible noise that may have crept in from the previous stages.
+  In order to detect all tomatoes in the scene individually, it is necessary to develop an algorithm capable of separating all the groups of points. That is why we have used a clustering algorithm which allows us to group the points by groups establishing the minimum amount of points that we want to have to form one. In this way we also avoid possible noise that may have crept in from the previous stages.
 
 Finally, in order to obtain the coordinates of the tomatoes, we have used a RANSAC algorithm to adjust the points of each cluster to the sphere shape defined by RANSAC. Using the "pyRansac3D" library we are able to obtain the centers of these spheres and therefore the centers of the tomatoes.
 
@@ -91,14 +91,14 @@ Finally, in order to obtain the coordinates of the tomatoes, we have used a RANS
 ## Inverse Kinematics <a name="6"></a>
 To solve the inverse kinematics part, we do it geometrically, where it is necessary to know the distance between each joint as well as the inclination in degrees of the arm pitch.
 
-This will allow us to move the Matt-Omato robotic arm to any 3D coordinate that results in the computer vision part. The actuator located at the tip of the robotic arm allows us to correctly pick up the tomato without any damage.
+This will allow us to move the Matt-Omato robotic arm to any 3D coordinate that results in the computer vision part. The actuator located at the tip of the robotic arm allows us to correctly pick up the tomato without any damages.
 
 ## Movement <a name="M"></a>
 <img src="https://user-images.githubusercontent.com/65310531/119307007-4def8f00-bc6b-11eb-8a46-fb86680cb764.png" align="right" width="250" alt="cloud"/>
 In order to be able to move Matt-Omato autonomously, he has been provided with two distance sensors capable of detecting any element in front of or behind him. 
 
 Matt-Omato starts his movement in a straight line thanks to the rails and cannot deviate from them. The steps that Matt-Omato follows internally for the movement are as follows:
-1. Does the depth sensor detect any element in front of it?
+1. Does the depth sensor detect any elements in front of it?
 2. If it detects any element
    - Rotate camera joint to point to the other line of tomato plants
 3. If no element is detected
