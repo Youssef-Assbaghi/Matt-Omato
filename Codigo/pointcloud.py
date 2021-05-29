@@ -63,8 +63,8 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
     cs = math.cos(math.radians(angulo))
     centers = np.array([])
     dic = {"x":[-1,2], #rojo
-           "z":[0.025,1], #azul
-            "y":[-1.75,1.75]} #verde
+           "z":[0.05,1], #azul
+            "y":[-1.25,1.25]} #verde
     for u in range(u_res):
         for v in range(v_res):
                 w = int(v_res * u + v)
@@ -74,7 +74,7 @@ def Get_Image(sensorHandle, robot, angulo, visualizar):
                 aux_xyzv=np.array([(x*cs-y*ss), (x*ss+y*cs), z])
                 if pass_through_filter(dic, aux_xyzv):  #pass through filter
                     auxhsv=[img[u][v][0]/360.0,img[u][v][2],img[u][v][1]]
-                    if ((auxhsv[0] < 0.20 or auxhsv[0] > 0.97) and auxhsv[1] > 0.60 and auxhsv[2] > 0.23): #Threshold HSI
+                    if ((auxhsv[0] < 0.20 or auxhsv[0] > 0.97) and auxhsv[1] > 0.60 and auxhsv[2] > 0.20): #Threshold HSI
                         xyzv = np.append(xyzv, aux_xyzv)
     if len(xyzv) != 0:
         xyzv=np.reshape(xyzv,(-1,3))
